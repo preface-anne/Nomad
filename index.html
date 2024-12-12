@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preface Course Generator</title>
+    <link rel="icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet"> <!-- Link to Montserrat -->
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif; /* Set font to Montserrat */
+            font-weight: 600; /* Set font weight to 600 for thicker text */
+            text-align: center;
+            padding: 50px;
+            background-color: #e6e7e8; /* Background color */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600; /* Thicker font for button */
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 100px; /* Font size for result */
+            color: #333; /* Text color */
+        }
+        .generated-box {
+            display: inline-block;
+            width: 100px; /* Width set to 100px */
+            height: 120px; /* Height set back to 120px */
+            margin: 10px;
+            background-color: #fff; /* Default background color */
+            border-radius: 10px;
+            position: relative; /* For absolute positioning */
+            text-align: center;
+            color: #fff; /* Text color for better contrast */
+        }
+        .small-m {
+            font-size: 12px; /* Small size for the M */
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-weight: 600; /* Thicker font for small M */
+        }
+        .number {
+            font-size: 28px; /* Increased size for the generated number */
+            line-height: 60px; /* Center vertically */
+            height: 60px; /* Fixed height for centering */
+        }
+        .small-text {
+            font-size: 12px; /* Small size for course name */
+            font-weight: 400; /* Regular weight for small text */
+        }
+        #generatedList {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping to multiple rows */
+            justify-content: center; /* Center the boxes */
+        }
+        img {
+            height: 100px; /* Set height for the logo */
+            width: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body>
+    <img src="preface.png" alt="Preface Logo"> <!-- Logo image -->
+    <br>
+    <div id="result"></div>
+    <br>
+    <button id="generateButton">Generate Course</button>
+    <br>
+    <div id="generatedList"></div>
+
+    <script>
+        let numbers = Array.from({length: 60}, (_, i) => i + 1); // Create array [1, 2, ..., 60]
+
+        document.getElementById('generateButton').addEventListener('click', function() {
+            if (numbers.length === 0) {
+                document.getElementById('result').innerText = "All courses have been generated.";
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * numbers.length);
+            let number = numbers[randomIndex];
+            numbers.splice(randomIndex, 1); // Remove the number from the array
+
+            // Format the number to two digits
+            let formattedNumber = number < 10 ? '0' + number : number.toString();
+            let displayNumber = formattedNumber;
+
+            // Create a new box for the generated number
+            const box = document.createElement('div');
+            box.className = 'generated-box';
+            box.innerHTML = `<span class="small-m">M</span><br><div class="number">${displayNumber}</div>`;
+
+            // Set background color based on number ranges
+            if (number >= 1 && number <= 10) {
+                box.style.backgroundColor = '#8dc7c4'; // Color for 01 to 10
+            } else if (number >= 11 && number <= 20) {
+                box.style.backgroundColor = '#6bb9c4'; // Color for 11 to 20
+            } else if (number >= 21 && number <= 30) {
+                box.style.backgroundColor = '#649cc6'; // Color for 21 to 30
+            } else if (number >= 31 && number <= 40) {
+                box.style.backgroundColor = '#44779c'; // Color for 31 to 40
+            } else if (number >= 41 && number <= 50) {
+                box.style.backgroundColor = '#424f9a'; // Color for 41 to 50
+            } else if (number >= 51 && number <= 60) {
+                box.style.backgroundColor = '#293880'; // Color for 51 to 60
+            }
+
+            // Determine the text based on the first digit and exceptions
+            let displayText = '';
+            const firstDigit = parseInt(formattedNumber[0]);
+
+            if (formattedNumber >= '07' && formattedNumber <= '10') {
+                displayText = 'Hopscotch';
+            } else if (formattedNumber === '20') {
+                displayText = 'Scratch';
+            } else if (formattedNumber === '30') {
+                displayText = 'App Inventor'; // Changed to "App Inventor"
+            } else if (formattedNumber >= '38' && formattedNumber <= '40') {
+                displayText = 'Swift';
+            } else if (formattedNumber >= '54' && formattedNumber <= '57') {
+                displayText = 'Javascript';
+            } else if (formattedNumber >= '58' && formattedNumber <= '60') {
+                displayText = 'Full Stack';
+            } else {
+                switch (firstDigit) {
+                    case 0:
+                        displayText = 'ScratchJr';
+                        break;
+                    case 1:
+                        displayText = 'Scratch';
+                        break;
+                    case 2:
+                        displayText = 'App Inventor'; // Changed to "App Inventor"
+                        break;
+                    case 3:
+                        displayText = 'Python';
+                        break;
+                    case 4:
+                        displayText = 'Unity';
+                        break;
+                    case 5:
+                        displayText = 'HTML/CSS';
+                        break;
+                }
+            }
+
+            // Append the determined text to the box
+            if (displayText) {
+                box.innerHTML += `<span class="small-text">${displayText}</span>`;
+            }
+
+            document.getElementById('result').innerText = `Course: M${displayNumber}`;
+            // Insert the new box at the beginning of the generated list
+            document.getElementById('generatedList').insertBefore(box, document.getElementById('generatedList').firstChild);
+        });
+    </script>
+</body>
+</html>
